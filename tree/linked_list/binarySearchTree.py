@@ -1,63 +1,67 @@
-
 class tree():
-    def __init__(self, data):
+    def __init__(self, key, data):
         self.data = data
+        self.key = key
         self.left = None
         self.right = None
 
-def bstSearch(a):
-    global root
-    current = root
-
-    if(current == None): #When root node is None
-        print("Root node is not exist")
-        return None
-
-    while(True): 
-        if(current.data == a):  #Found a in tree
-            print("It has " + str(a))
-            return None #Found a -> return None for bstInsert
-        past = current # past is for def bstInsert
-        if(a<current.data): #When a is smaller than current.data
-            current = current.left #current moved to left
-        elif(a>current.data): #when a is bigger than current.data
-            current = current.right #current moved to right
+class bst():
+    def __init__(self):
+        self.root = None
         
-        if(current == None): #current is not exist, then tree dosen't have a 
-            print("It doesn't have " + str(a))
-            return past #Can't find a, then return past for bstInsert
+        
+    def bstSearch(self, a):
+        current = self.root
 
-def bstInsert(a):
-    current = bstSearch(a)
-    if(current == None): #When this tree already have a
-        print("It already has " + str(a))
-        return
+        if(current == None): #When root node is None
+            print("Root node is not exist")
+            return False, None
+
+        while(True):
+            past = current # past is for def bstInsert
+            if(current.key == a):  #Found a in tree
+                print("It already has " + str(a) + ", Please update data")
+                return True, past
+            if(a<current.key): #When a is smaller than current.key
+                current = current.left #current moved to left
+            elif(a>current.key): #when a is bigger than current.key
+                current = current.right #current moved to right
+            
+            if(current == None): #current is not exist, then tree dosen't have a 
+                return False, past #Can't find a, then return past for bstInsert
+
+    def bstInsert(self, a):
+        #current[0] means whether or not tree have a
+        #current[1] is past in def bstSearch
+        current = self.bstSearch(a)
+        data = input("Please enter data : ")
+        if(current[1] == None): #when tree has no root
+            self.root = tree(a,data)
+            return
+        if(current[0] == True): #When find a in tree
+            current[1].data = data
+            return
     
-    print("Insert " + str(a))
-    temp = tree(a) #When tree doesn't have a
-    if(a>current.data): #Put a in the right place
-        current.right = temp
-    elif(a<current.data):
-        current.left = temp
+        temp = tree(a,data) #When tree doesn't have a
+        if(a>current[1].key): #Put a in the right place
+            current[1].right = temp
+        elif(a<current[1].key):
+            current[1].left = temp
+        
+    def bstPreOrder(self, current):
+        if(current == None):
+            return
+        print(current.key, end = ' ')
+        print(current.data)
+        self.bstPreOrder(current.left)
+        self.bstPreOrder(current.right)
 
-def bstPreOrder(current):
-    if(current == None):
-        return
-    print(current.data, end = ' ')
-    bstPreOrder(current.left)
-    bstPreOrder(current.right)
 
-n1 = tree(15)
-n2 = tree(11)
-n3 = tree(70)
-n4 = tree(5)
-n1.left = n2
-n1.right = n3
-n2.left = n4
-root = n1
-
-bstInsert(75)
-bstPreOrder(n1)
-print()
-bstInsert(69)
-bstPreOrder(n1)
+n1 = bst()
+n1.bstInsert(15)
+n1.bstInsert(13)
+n1.bstInsert(50)
+n1.bstInsert(11)
+n1.bstInsert(14)
+n1.bstInsert(50)
+n1.bstPreOrder(n1.root)
