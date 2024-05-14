@@ -10,7 +10,7 @@ class bst():
     def __init__(self):
         self.root = None
         
-    def bstSearch(self, a):
+    def bstSearch(self, key):
         current = self.root
         morepast = None
 
@@ -19,12 +19,12 @@ class bst():
 
         while(True):
             past = current # past is for def bstInsert
-            if(current.key == a):  #Found a in tree
+            if(current.key == key):  #Found a in tree
                 return True, past, morepast
-            if(a<current.key): #When a is smaller than current.key
+            if(key<current.key): #When a is smaller than current.key
                 morepast = current
                 current = current.left #current moved to left
-            elif(a>current.key): #when a is bigger than current.key
+            elif(key>current.key): #when a is bigger than current.key
                 morepast = current
                 current = current.right #current moved to right
             
@@ -81,6 +81,43 @@ class bst():
         self.bstpreorderForInsert(current.left)
         self.bstpreorderForInsert(current.right)
 
+    def bstDeleteUpdate(self, key): #update delete
+        current = self.bstSearch(key)
+
+        if(current[0] == False):
+            print("This tree has no " + str(key))
+            return
+        
+        #node is leaf
+        if(current[1].left == None and current[1].right == None):
+            if(current[1] == self.root): #When the node Im gonna delete is root has no sons
+                self.root = None
+                return
+            if(current[1].key > current[2].key):
+                current[2].right = None
+            else:
+                current[2].left = None
+            return
+        #node got a son
+        elif(current[1].left != None and current[1].right == None): #node got left, no right
+            current[1].key = current[1].left.key
+            current[1].data = current[1].left.data
+            current[1].right = current[1].left.right
+            current[1].left = current[1].left.left
+        elif(current[1].right != None and current[1].left == None): #node got right, no left
+            current[1].key = current[1].right.key
+            current[1].data = current[1].right.data
+            current[1].left = current[1].right.left
+            current[1].right = current[1].right.right
+        #node got two sons
+        else:
+            node = current[1]
+            while(node.right != None):
+                parentNode = node
+                node = node.right
+            parentNode.right = None
+            current[1].key = node.key
+            current[1].data = node.data
 
     def bstGetHeight(self):
         print()
@@ -100,13 +137,10 @@ class bst():
 
 
 n1 = bst()
-n1.bstInsert(15)
-n1.bstInsert(13)
-n1.bstInsert(50)
-n1.bstInsert(11)
-n1.bstInsert(14)
-n1.bstInsert(12)
+keyset = [15,13,11,14,60,44,55,68,65]
+for key in keyset:
+    n1.bstInsert(key)
 
-n1.bstDelete(13)
+n1.bstDeleteUpdate(68)
 n1.bstPreOrder()
 
