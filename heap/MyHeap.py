@@ -47,9 +47,67 @@ class maxHeap:
         for i in range(1, len(self.tree)):
             print(self.tree[i], end=' ')
 
+class minHeap:
+    def __init__(self, arr):
+        self.tree = [len(arr)]+arr
+
+    def minInsert(self, data):
+        insertIndex = len(self.tree)
+        self.tree.append(data)
+        while(True):
+            if(insertIndex == 1):
+                return
+            if(self.tree[insertIndex]<self.tree[int(insertIndex/2)]):
+                self.tree[insertIndex], self.tree[int(insertIndex/2)] = self.tree[int(insertIndex/2)], self.tree[insertIndex] 
+                insertIndex = int(insertIndex/2)
+            else:
+                return
+
+    def minDelete(self):
+        if(len(self.tree)<=1):
+            return None
+        if(len(self.tree)<=2):
+            return self.tree.pop()
+        
+        self.tree[1], self.tree[-1] = self.tree[-1], self.tree[1]
+        min = self.tree.pop()
+
+        n = 1
+        while(True):
+            left = n*2
+            right = n*2+1
+            if(left >= len(self.tree)):
+                return min
+            if(right >= len(self.tree)):
+                if(self.tree[left]<self.tree[n]):
+                    self.tree[left], self.tree[n] = self.tree[n], self.tree[left]
+                return min
+            if(self.tree[right]<self.tree[left] and self.tree[right] < self.tree[n]):
+                self.tree[right], self.tree[n] = self.tree[n], self.tree[right]
+                n=right
+            elif(self.tree[left]<self.tree[right] and self.tree[left]<self.tree[n]):
+                self.tree[left], self.tree[n] = self.tree[n], self.tree[left]
+                n=left
+            else:
+                return min
+
+        print()
+    
+    def printArr(self):
+        for i in range(1, len(self.tree)):
+            print(self.tree[i], end = ' ')
+
 arr = [18,13,5,12,8]
 tree = maxHeap(arr)
 tree.maxInsert(19)
 tree.maxInsert(21)
 tree.maxDelete()
 tree.printArr()
+print()
+
+arr2 = [10,15,30,35,50,100,40]
+tree2 = minHeap(arr2)
+tree2.minInsert(8)
+tree2.minDelete()
+tree2.printArr()
+
