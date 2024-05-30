@@ -41,7 +41,24 @@ class maxHeap:
                 n=right
             else:
                 return largest
-            
+    
+    def heapify(self, node):
+        left = node*2
+        right = node*2+1
+        largest = node
+        if(left<len(self.tree) and self.tree[largest]<self.tree[left]):
+            largest = left
+        if(right<len(self.tree) and self.tree[largest]<self.tree[right]):
+            largest = right
+        
+        if(largest != node):
+            self.tree[largest], self.tree[node] = self.tree[node], self.tree[largest]
+            self.heapify(largest)
+
+    def make_tree_heap(self):
+        for i in range(int(len(self.tree)/2), 0, -1):
+            print(i)
+            self.heapify(i)
     
     def printArr(self):
         for i in range(1, len(self.tree)):
@@ -92,22 +109,42 @@ class minHeap:
                 return min
 
         print()
+
+    def heapify(self, node):
+        left = node*2
+        right = node*2+1
+        largest = node
+        if(left<len(self.tree) and self.tree[largest]>self.tree[left]):
+            largest = left
+        if(right<len(self.tree) and self.tree[largest]>self.tree[right]):
+            largest = right
+        
+        if(largest != node):
+            self.tree[largest], self.tree[node] = self.tree[node], self.tree[largest]
+            self.heapify(largest)
+
+    def make_tree_heap(self):
+        for i in range(int(len(self.tree)/2), 0, -1):
+            print(i)
+            self.heapify(i)
     
     def printArr(self):
         for i in range(1, len(self.tree)):
             print(self.tree[i], end = ' ')
 
-arr = [18,13,5,12,8]
+arr = [5,8,12,13,18]
 tree = maxHeap(arr)
-tree.maxInsert(19)
-tree.maxInsert(21)
-tree.maxDelete()
+tree.make_tree_heap()
+#tree.maxInsert(19)
+#tree.maxInsert(21)
+#tree.maxDelete()
 tree.printArr()
 print()
 
-arr2 = [10,15,30,35,50,100,40]
+arr2 = [100,80,40,20,15,10,5]
 tree2 = minHeap(arr2)
-tree2.minInsert(8)
-tree2.minDelete()
+tree2.make_tree_heap()
+#tree2.minInsert(8)
+#tree2.minDelete()
 tree2.printArr()
 
